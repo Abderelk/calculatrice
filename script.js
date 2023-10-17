@@ -1,106 +1,81 @@
 "use strict";
-let affichage = document.querySelector(".resultatb");
-const touches = document.querySelectorAll("section div ")
-let val1 = 0
-let val2 = 0
+let display = document.querySelector(".resultatb");
+const buttons = document.querySelectorAll("input")
+let FirstValue = 0
+let SecondValue = 0
 let operateur1 = ""
-
-touches.forEach((touche) =>
-    touche.addEventListener("click", () => {
-        let toucheClair = touche.textContent.replace(/\s/g, "")
-        switch (toucheClair) {
+function calculate() {
+    if (operateur1.includes("+")) {
+        FirstValue += SecondValue
+    }
+    if (operateur1.includes("-")) {
+        FirstValue -= SecondValue
+    }
+    if (operateur1.includes("/")) {
+        let error = FirstValue / SecondValue;
+        if (error !== Infinity) {
+            FirstValue /= SecondValue;
+        } else {
+            display.textContent = "Error";
+            FirstValue = "Error";
+        }
+    }
+    if (operateur1.includes("x")) {
+        FirstValue *= SecondValue
+    }
+    SecondValue = 0
+}
+buttons.forEach((button) =>
+    button.addEventListener("click", () => {
+        switch (button.value) {
             case "+":
             case "-":
             case "x":
             case "/":
-                affichage.textContent = toucheClair
-                if (val2 !== 0) {
-                    if (operateur1.includes("+")) {
-                        val1 += val2
-                        val2 = 0
-                    }
-                    if (operateur1.includes("-")) {
-                        val1 -= val2
-                        val2 = 0
-                    }
-                    if (operateur1.includes("/")) {
-                        val1 /= val2
-                        val2 = 0
-                    }
-                    else if (operateur1.includes("x")) {
-                        val1 *= val2
-                        val2 = 0
-                    }
-                    operateur1 = toucheClair
-
+                display.textContent = button.value
+                if (SecondValue !== 0) {
+                    calculate()
+                    operateur1 = button.value
                 }
                 else {
-                    operateur1 = toucheClair
+                    operateur1 = button.value
                 }
                 break
             case "=":
-                if (operateur1.includes("+")) {
-                    affichage.textContent = val1 + val2
-                    val1 += val2
-                }
-                if (operateur1.includes("-")) {
-                    affichage.textContent = val1 - val2
-                    val1 -= val2
-                }
-                if (operateur1.includes("x")) {
-                    affichage.textContent = val1 * val2
-                    val1 *= val2
-                }
-                if (operateur1.includes("/")) {
-                    let erreur = val1 / val2
-                    console.log(erreur)
-                    if (erreur !== Infinity) {
-                        affichage.textContent = erreur
-                        val1 /= val2
-                    }
-                    else {
-                        affichage.textContent = "Erreur"
-                        val1 = 0
-                    }
-                }
-                operateur1 = ""
-                val2 = 0
+                calculate()
+                display.textContent = FirstValue
                 break
             case "%":
-                if (affichage !== 0) {
-                    affichage.textContent = (affichage.textContent) / 100
-                }
+                display.textContent = (display.textContent) / 100
                 break
             case "+/-":
-                affichage.textContent = (affichage.textContent - 2 * affichage.textContent)
+                display.textContent = (display.textContent - 2 * display.textContent)
                 break
             case "AC":
-                affichage.textContent = ""
-                val1 = 0
-                val2 = 0
-                operateur1 = 0
+                display.textContent = ""
+                FirstValue = SecondValue = operateur1 = 0
                 break
             default:
-                affichage.textContent += toucheClair
-                if (affichage.textContent.includes("+")) {
-                    val2 = parseFloat(affichage.textContent.replace("+", ""))
+                display.textContent += button.value
+                if (display.textContent.includes("+")) {
+                    SecondValue = parseFloat(display.textContent.replace("+", ""))
                 }
-                else if (affichage.textContent.includes("-")) {
-                    val2 = parseFloat(affichage.textContent.replace("-", ""))
+                else if (display.textContent.includes("-")) {
+                    SecondValue = parseFloat(display.textContent.replace("-", ""))
                 }
-                else if (affichage.textContent.includes("x")) {
-                    val2 = parseFloat(affichage.textContent.replace("x", ""))
+                else if (display.textContent.includes("x")) {
+                    SecondValue = parseFloat(display.textContent.replace("x", ""))
                 }
-                else if (affichage.textContent.includes("/")) {
-                    val2 = parseFloat(affichage.textContent.replace("/", ""))
+                else if (display.textContent.includes("/")) {
+                    SecondValue = parseFloat(display.textContent.replace("/", ""))
                 }
                 else {
-                    val1 = parseFloat(affichage.textContent)
+                    FirstValue = parseFloat(display.textContent)
                 }
                 break
         }
-        console.log("val1 = " + parseFloat(val1))
-        console.log("val2 = " + parseFloat(val2))
+        console.log("FirstValue = " + FirstValue)
+        console.log("SecondValue = " + SecondValue)
         console.log("operation = " + operateur1)
     })
 );
